@@ -30,7 +30,7 @@ export default function Navbar({ user }) {
 
   // logout handler
   const handleLogout = async () => {
-    await fetch("http://localhost:5000/auth/logout", {
+    await fetch("https://gmail-ai-sorter-backend.onrender.com/auth/logout", {
       credentials: "include"
     });
     window.location.href = "/";
@@ -153,7 +153,7 @@ export default function Navbar({ user }) {
             </div>
           ) : (
             <a
-              href="http://localhost:5000/auth/google"
+              href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
               className="ml-2 px-4 py-2 rounded-full text-sm
                          bg-blue-500 text-white hover:bg-blue-600"
             >
@@ -165,3 +165,4 @@ export default function Navbar({ user }) {
     </nav>
   );
 }
+
