@@ -7,7 +7,7 @@ import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-import Aboutus from "./pages/Aboutus.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
 import Feedback from "./pages/Feedback.jsx";
 
 
@@ -86,7 +86,7 @@ const App = () => {
 
           {/* STATIC PAGES */}
           <Route path="/about" element={<About />} />
-          <Route path="/about-us" element={<Aboutus />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
 
@@ -103,5 +103,6 @@ const App = () => {
 };
 
 export default App;
+
 
 
