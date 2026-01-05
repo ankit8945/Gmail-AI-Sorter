@@ -86,7 +86,7 @@ const App = () => {
 
           {/* STATIC PAGES */}
           <Route path="/about" element={<About />} />
-          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/about-us" element={<Aboutus />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
 
@@ -103,4 +103,5 @@ const App = () => {
 };
 
 export default App;
+
 
