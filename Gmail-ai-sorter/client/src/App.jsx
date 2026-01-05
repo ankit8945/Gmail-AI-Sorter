@@ -7,7 +7,7 @@ import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-import AboutUs from "./pages/AboutUs.jsx";
+import Aboutus from "./pages/Aboutus.jsx";
 import Feedback from "./pages/Feedback.jsx";
 
 
@@ -103,3 +103,4 @@ const App = () => {
 };
 
 export default App;
+
