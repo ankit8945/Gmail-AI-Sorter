@@ -14,7 +14,7 @@ export default function AddKeyword() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:5000/api/add-keyword", {
+      const res = await fetch("https://gmail-ai-sorter-backend.onrender.com/api/add-keyword", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -39,7 +39,7 @@ export default function AddKeyword() {
   ====================== */
   const deleteCategory = async (category) => {
     try {
-      await fetch("http://localhost:5000/api/delete-category", {
+      await fetch("https://gmail-ai-sorter-backend.onrender.com/api/delete-category", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category })
@@ -94,3 +94,4 @@ export default function AddKeyword() {
     </div>
   );
 }
+
