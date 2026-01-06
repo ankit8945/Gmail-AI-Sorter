@@ -40,9 +40,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
-      sameSite: "none",
+      secure: true,
       httpOnly: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000
     }
   })
@@ -250,4 +250,5 @@ app.post("/api/analyze", authRequired, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
