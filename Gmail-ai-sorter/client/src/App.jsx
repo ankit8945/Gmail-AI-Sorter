@@ -15,6 +15,21 @@ import { getMe } from "./api.js";
 export default function App() {
   const [me, setMe] = useState(null);
 
+const handleLogout = async () => {
+  try {
+    await fetch(
+      "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
+      { credentials: "include" }
+    );
+  } catch (e) {
+    console.error("Logout failed");
+  } finally {
+    // 🔥 THIS IS THE KEY LINE
+    setMe({ authenticated: false, user: null });
+  }
+};
+
+
   useEffect(() => {
     getMe()
       .then(setMe)
@@ -31,7 +46,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar user={me} />
+      <Navbar user={me} onLogout={handleLogout} />
+
 
       <main className="flex-1">
         <Routes>
@@ -54,3 +70,4 @@ export default function App() {
     </div>
   );
 }
+
