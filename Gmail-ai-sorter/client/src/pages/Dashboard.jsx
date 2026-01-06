@@ -18,7 +18,7 @@ const CATEGORY_COLORS = {
 
 export default function Dashboard({ user }) {
   console.log("DASHBOARD PAGE LOADED", user);
- {
+
   const [count, setCount] = useState(20);
   const [emails, setEmails] = useState([]);
   const [stats, setStats] = useState({ total: 0, categories: {} });
@@ -34,10 +34,10 @@ export default function Dashboard({ user }) {
     setError("");
     try {
       const data = await analyzeEmails(count);
-      setEmails(data.emails || []);
-      setStats(data.stats || { total: 0, categories: {} });
+      setEmails(data?.emails || []);
+      setStats(data?.stats || { total: 0, categories: {} });
       setActiveCategory("All");
-    } catch {
+    } catch (err) {
       setError("Failed to analyze emails. Please try again.");
     } finally {
       setLoading(false);
@@ -45,12 +45,10 @@ export default function Dashboard({ user }) {
   };
 
   /* =====================
-     AUTO ANALYZE ON LOAD
+     AUTO LOAD ON FIRST RENDER
   ===================== */
   useEffect(() => {
-    if (emails.length === 0) {
-      handleAnalyze();
-    }
+    handleAnalyze();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,16 +57,13 @@ export default function Dashboard({ user }) {
   ===================== */
   const grouped = emails.reduce((acc, mail) => {
     const cat = mail.category || "Updates";
-    acc[cat] = acc[cat] || [];
+    if (!acc[cat]) acc[cat] = [];
     acc[cat].push(mail);
     return acc;
   }, {});
 
   const categories = ["All", ...Object.keys(grouped)];
 
-  /* =====================
-     UI
-  ===================== */
   return (
     <div className="min-h-screen gradient-bg px-4 py-6">
       {loading && <LoadingOverlay />}
@@ -83,8 +78,7 @@ export default function Dashboard({ user }) {
         </p>
 
         {/* CONTROLS */}
-        <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          {/* LEFT */}
+        <div className="mt-5 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-3 items-center">
             <select
               value={count}
@@ -104,18 +98,8 @@ export default function Dashboard({ user }) {
             >
               Analyze
             </button>
-
-            {emails.length > 0 && (
-              <button
-                onClick={() => window.print()}
-                className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
-              >
-                Export PDF
-              </button>
-            )}
           </div>
 
-          {/* RIGHT */}
           <AddKeyword />
         </div>
       </div>
@@ -186,4 +170,3 @@ export default function Dashboard({ user }) {
     </div>
   );
 }
-
