@@ -11,9 +11,17 @@ const Footer = () => {
         <span className="text-slate-500 text-center sm:text-right">
           Built with ❤️ by Team Hexa
         </span>
+        <span>
+        <a href="/privacy-policy">Privacy Policy</a>
+           </span>
+         <span>
+        <a href="/terms-of-service">Terms of Service</a>
+
+        </span>
       </div>
     </footer>
   );
 };
 
 export default Footer;
+
