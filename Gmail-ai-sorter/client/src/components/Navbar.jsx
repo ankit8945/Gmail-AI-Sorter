@@ -14,7 +14,8 @@ function CircularLogo({ src = "/fevicon.jpeg", size = 36 }) {
   );
 }
 
-export default function Navbar({ user }) {
+export default function Navbar({ user, onLogout }) 
+ {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const base =
@@ -137,4 +138,5 @@ export default function Navbar({ user }) {
     </nav>
   );
 }
+
 
