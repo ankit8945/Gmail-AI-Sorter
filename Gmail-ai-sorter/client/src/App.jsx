@@ -10,18 +10,11 @@ import Contact from "./pages/Contact.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Feedback from "./pages/Feedback.jsx";
 
-
-// ⚠️ CASE-SENSITIVE IMPORT (VERY IMPORTANT)
-import AddKeyword from "./components/AddKeyword.jsx";
-
 import { getMe } from "./api.js";
 
 const App = () => {
   const [me, setMe] = useState({ authenticated: false, user: null });
   const [initialized, setInitialized] = useState(false);
-
-  // 🔥 keyword → category map (frontend copy)
-  const [keywordMap, setKeywordMap] = useState({});
 
   useEffect(() => {
     const loadMe = async () => {
@@ -54,12 +47,14 @@ const App = () => {
   }
 
   return (
+    // 🔥 FULL HEIGHT LAYOUT
     <div className="min-h-screen flex flex-col">
-      {/* NAVBAR */}
+      {/* NAVBAR (already fixed) */}
       <Navbar user={me} />
 
       {/* MAIN CONTENT */}
-      <main className="flex-1">
+      {/* pb-14 = footer height space so content never hides */}
+      <main className="flex-1 pb-14">
         <Routes>
           {/* HOME */}
           <Route path="/" element={<Home user={me} />} />
@@ -70,13 +65,7 @@ const App = () => {
             element={
               me.authenticated ? (
                 <div className="px-4 py-4">
-                  
-
-                  {/* 🔥 DASHBOARD GETS KEYWORD MAP */}
-                  <Dashboard
-                    user={me}
-                    keywordMap={keywordMap}
-                  />
+                  <Dashboard user={me} />
                 </div>
               ) : (
                 <Navigate to="/" />
@@ -90,21 +79,17 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
 
-
           {/* FALLBACK */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
 
-      {/* FOOTER */}
-      <Footer />
+      {/* FOOTER (ALWAYS VISIBLE) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        <Footer />
+      </div>
     </div>
   );
 };
 
 export default App;
-
-
-
-
-
