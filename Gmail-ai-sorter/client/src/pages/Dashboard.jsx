@@ -74,6 +74,7 @@ export default function Dashboard({ user }) {
     acc[cat].push(mail);
     return acc;
   }, {});
+
   const categories = ["All", ...Object.keys(grouped)];
 
   return (
@@ -82,46 +83,47 @@ export default function Dashboard({ user }) {
 
       {/* HEADER */}
       <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-6 items-start">
+        
+        {/* TITLE */}
+        <h1 className="text-3xl font-bold text-white">
+          Inbox Dashboard
+        </h1>
+        <p className="text-blue-100 text-sm mt-1 max-w-md">
+          Analyze & categorize Gmail emails using AI
+        </p>
 
-          {/* LEFT: TITLE */}
-          <div>
-            <h1 className="text-3xl font-bold text-white">
-              Inbox Dashboard
-            </h1>
-            <p className="text-blue-100 text-sm mt-1 max-w-md">
-              Analyze & categorize Gmail emails using AI
-            </p>
-          </div>
+        {/* ANALYZE CONTROLS — LEFT, TEXT KE NICHE */}
+        <div className="mt-4 flex flex-wrap gap-3 items-center">
+          <select
+            value={count}
+            onChange={(e) => setCount(Number(e.target.value))}
+            className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
+          >
+            {EMAIL_COUNTS.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
 
-          {/* RIGHT: CONTROLS + KEYWORDS */}
-          <div className="flex flex-col gap-4 items-start lg:items-end">
+          <button
+            onClick={handleAnalyze}
+            className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
+          >
+            Analyze
+          </button>
 
-            {/* ANALYZE CONTROLS */}
-            <div className="flex flex-wrap gap-3 items-center justify-start lg:justify-end">
-              <select
-                value={count}
-                onChange={(e) => setCount(Number(e.target.value))}
-                className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
-              >
-                {EMAIL_COUNTS.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+          {emails.length > 0 && (
+            <button
+              onClick={() => window.print()}
+              className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
+            >
+              Export PDF
+            </button>
+          )}
+        </div>
 
-              <button
-                onClick={handleAnalyze}
-                className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
-              >
-                Analyze
-              </button>
-            </div>
-
-            {/* ADD KEYWORD (WRAPS BOTH AXES) */}
-            <div className="w-full max-w-[520px]">
-              <AddKeyword user={user} />
-            </div>
-          </div>
+        {/* ADD KEYWORDS — FULL WRAP */}
+        <div className="mt-4 w-full max-w-4xl">
+          <AddKeyword user={user} />
         </div>
       </div>
 
