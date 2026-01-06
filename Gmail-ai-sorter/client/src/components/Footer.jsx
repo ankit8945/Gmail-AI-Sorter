@@ -12,7 +12,14 @@ const Footer = () => {
           Built with ❤️ by Team Hexa
         </span>
         <span>
-        <a href="/privacy-policy">Privacy Policy</a>   <a href="/terms-of-service">Terms of Service</a>
+       <footer className="flex justify-center gap-x-4 text-sm">
+  <a href="/privacy-policy" className="hover:underline">
+    Privacy Policy
+  </a>
+  <a href="/terms-of-service" className="hover:underline">
+    Terms of Service
+  </a>
+</footer>
 
         </span>
       </div>
@@ -21,6 +28,7 @@ const Footer = () => {
 };
 
 export default Footer;
+
 
 
 
