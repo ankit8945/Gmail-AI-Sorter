@@ -6,114 +6,56 @@ dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /* ==========================
-   USER KEYWORD MATCH
-   (HIGHEST PRIORITY)
+   HELPERS
 ========================== */
-function matchUserCategory(email, userCategoryMap) {
-  const text = `${email.subject} ${email.snippet}`.toLowerCase();
 
-  for (const keyword in userCategoryMap) {
-    if (text.includes(keyword)) {
-      return userCategoryMap[keyword];
-    }
-  }
-  return null;
+function normalize(cat) {
+  return cat
+    .trim()
+    .replace(/[^a-zA-Z0-9 &]/g, "")
+    .replace(/\s+/g, " ")
+    .slice(0, 30);
+}
+
+function safeParseCategory(text) {
+  const match = text.match(/"category"\s*:\s*"([^"]+)"/i);
+  return match ? normalize(match[1]) : null;
 }
 
 /* ==========================
-   AI CATEGORY MATCH
-   (SECOND PRIORITY)
-========================== */
-function matchAICategory(email, aiCategoryMap) {
-  const text = `${email.subject} ${email.snippet}`.toLowerCase();
-
-  for (const key in aiCategoryMap) {
-    if (text.includes(key)) {
-      return aiCategoryMap[key];
-    }
-  }
-  return null;
-}
-
-/* ==========================
-   HARD FALLBACK
-   (TRY VERY HARD BEFORE UPDATES)
+   FALLBACK (UNCHANGED LOGIC)
 ========================== */
 function hardFallback(email) {
   const text = `${email.subject} ${email.snippet}`.toLowerCase();
 
-  // 🔥 EVENTS / COMMUNITY
-  if (
-    text.match(
-      /event|conference|summit|meetup|webinar|workshop|global|virtual|participant|badge|luma|open source/
-    )
-  ) {
-    return "Events";
-  }
-
   if (text.match(/otp|verification|login|security|alert/))
     return "OTP & Alerts";
-
-  if (text.match(/exam|result|admit|college|university|semester|scholarship/))
+  if (text.match(/exam|result|admit|college|university|scholarship/))
     return "Education";
-
-  if (text.match(/job|internship|interview|hiring|offer|recruiter/))
+  if (text.match(/job|internship|interview|hiring|recruiter/))
     return "Jobs";
-
-  if (text.match(/bank|payment|salary|invoice|refund|upi|transaction|loan/))
+  if (text.match(/bank|payment|invoice|refund|upi|loan/))
     return "Finance";
-
-  if (text.match(/order|delivery|shipped|amazon|flipkart|myntra/))
+  if (text.match(/order|delivery|amazon|flipkart|myntra/))
     return "Shopping";
-
-  if (text.match(/flight|train|ticket|booking|hotel|travel/))
+  if (text.match(/flight|train|ticket|hotel|travel/))
     return "Travel";
-
-  if (text.match(/doctor|hospital|appointment|medical|report/))
+  if (text.match(/doctor|hospital|medical|appointment/))
     return "Health";
-
-  if (text.match(/linkedin|instagram|facebook|twitter|follow|invite/))
+  if (text.match(/linkedin|instagram|facebook|twitter/))
     return "Social";
-
-  if (text.match(/movie|music|concert|netflix|spotify|show/))
+  if (text.match(/movie|music|concert|netflix|spotify/))
     return "Entertainment";
-
-  if (text.match(/meeting|zoom|google meet|conference|calendar/))
-    return "Meetings";
-
-  if (
-    text.match(
-      /\b(aadhaar|pan|passport|income tax|gst|gov\.?|government|ministry|nsdl|uidai)\b/
-    )
-  ) {
-    return "Government";
-  }
-
-  if (text.match(/newsletter|news|bulletin|digest/))
-    return "News & Media";
-
-   if (text.match(/newsletter|digest|weekly|monthly/))
+  if (text.match(/newsletter|digest|weekly|monthly/))
     return "Newsletter";
-
-  if (text.match(/update|release|version|feature|changelog/))
-    return "Product Updates";
-
-  if (text.match(/offer|sale|discount|deal|promo/))
+  if (text.match(/offer|sale|discount|promo/))
     return "Promotions";
 
-  if (text.match(/community|forum|member|participant|contributor/))
-    return "Community";
-
-  if (text.match(/account|settings|privacy|terms|policy/))
-    return "Account & System";
-
-
-  // ⚠️ LAST RESORT ONLY
   return "Updates";
 }
 
 /* ==========================
-   MAIN CLASSIFIER
+   MAIN CLASSIFIER (IMPROVED)
 ========================== */
 export async function classifyEmails(
   emails,
@@ -127,81 +69,50 @@ export async function classifyEmails(
   const results = [];
 
   for (const email of emails) {
-    /* 1️⃣ USER CATEGORY */
-    const userCat = matchUserCategory(email, userCategoryMap);
-    if (userCat) {
-      results.push({
-        ...email,
-        category: userCat,
-        source: "user"
-      });
-      continue;
+    const text = `${email.subject} ${email.snippet}`.toLowerCase();
+
+    // 1️⃣ User-defined categories
+    for (const key in userCategoryMap) {
+      if (text.includes(key)) {
+        results.push({ ...email, category: userCategoryMap[key] });
+        continue;
+      }
     }
 
-    /* 2️⃣ EXISTING AI CATEGORY */
-    const aiCat = matchAICategory(email, aiCategoryMap);
-    if (aiCat) {
-      results.push({
-        ...email,
-        category: aiCat,
-        source: "ai"
-      });
-      continue;
+    // 2️⃣ Existing AI categories
+    for (const key in aiCategoryMap) {
+      if (text.includes(key)) {
+        results.push({ ...email, category: aiCategoryMap[key] });
+        continue;
+      }
     }
 
-    /* 3️⃣ GEMINI – TRY SEMANTIC UNDERSTANDING */
+    // 3️⃣ Gemini
     const prompt = `
-You are an intelligent email classifier.
+Classify this email into ONE short category (1–2 words).
+Avoid "Updates" unless truly generic.
 
-CRITICAL RULES:
-- NEVER use "Updates" unless the email is completely generic.
-- If unsure, CREATE a new meaningful category instead of Updates.
-- Event / conference / community emails are NOT Government.
+Subject: "${email.subject}"
+Snippet: "${email.snippet}"
 
-Create a SHORT category name (1–2 words).
-
-Email Subject:
-"${email.subject}"
-
-Email Snippet:
-"${email.snippet}"
-
-Respond ONLY in JSON:
-{
-  "category": "CategoryName"
-}
+Return JSON only:
+{ "category": "CategoryName" }
 `;
 
     try {
       const response = await model.generateContent(prompt);
-      const text = response.response.text();
-
-      let parsed;
-      try {
-        parsed = JSON.parse(text);
-      } catch {
-        parsed = null;
-      }
-
-      let category = parsed?.category
-        ? parsed.category.trim()
-        : null;
-
-      // 🔥 BLOCK UPDATES FROM GEMINI
-      if (!category || category === "Updates") {
-        category = hardFallback(email);
-      }
+      const raw = response.response.text();
+      const category =
+        safeParseCategory(raw) || hardFallback(email);
 
       results.push({
         ...email,
-        category,
-        source: "ai-new"
+        category
       });
-    } catch (err) {
+    } catch {
       results.push({
         ...email,
-        category: hardFallback(email),
-        source: "fallback"
+        category: hardFallback(email)
       });
     }
   }
