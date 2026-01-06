@@ -26,6 +26,32 @@ export default function Dashboard({ user }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
+  // 🔐 AUTH GUARD (DASHBOARD LEVEL)
+if (!user?.authenticated) {
+  return (
+    <div className="min-h-[70vh] gradient-bg flex items-center justify-center px-4">
+      <div className="card p-6 text-center max-w-sm w-full">
+        <h2 className="text-lg font-semibold text-slate-100 mb-2">
+          Login required
+        </h2>
+
+        <p className="text-slate-300 text-sm mb-4">
+          Please connect your Gmail account to access the dashboard.
+        </p>
+
+        <a
+          href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
+          className="inline-block px-5 py-2 rounded-full bg-blue-500 text-white text-sm hover:bg-blue-600 transition"
+        >
+          Connect Gmail with Google
+        </a>
+      </div>
+    </div>
+  );
+}
+
+
   /* =====================
      ANALYZE EMAILS
   ===================== */
@@ -170,3 +196,4 @@ export default function Dashboard({ user }) {
     </div>
   );
 }
+
