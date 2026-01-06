@@ -15,19 +15,25 @@ import { getMe } from "./api.js";
 export default function App() {
   const [me, setMe] = useState(null);
 
+// App.jsx (inside App component)
+
 const handleLogout = async () => {
   try {
     await fetch(
       "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
-      { credentials: "include" }
+      {
+        method: "GET",
+        credentials: "include",
+      }
     );
-  } catch (e) {
-    console.error("Logout failed");
+  } catch (err) {
+    console.error("Logout failed", err);
   } finally {
-    // 🔥 THIS IS THE KEY LINE
+    // 🔥 THIS LINE IS CRITICAL
     setMe({ authenticated: false, user: null });
   }
 };
+
 
 
   useEffect(() => {
@@ -70,4 +76,5 @@ const handleLogout = async () => {
     </div>
   );
 }
+
 
