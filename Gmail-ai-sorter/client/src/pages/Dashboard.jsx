@@ -80,23 +80,25 @@ export default function Dashboard({ user }) {
     <div className="min-h-screen gradient-bg px-4 py-6">
       {loading && <LoadingOverlay />}
 
-      {/* HEADER (HORIZONTAL GROW ENABLED) */}
-      <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl overflow-x-auto">
-        <div className="min-w-[1100px]">
+      {/* HEADER */}
+      <div className="mb-8 rounded-3xl p-5 md:p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl overflow-x-hidden md:overflow-x-auto">
+        
+        {/* desktop horizontal grow only */}
+        <div className="md:min-w-[1100px]">
 
           {/* TITLE */}
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-2xl md:text-3xl font-bold text-white">
             Inbox Dashboard
           </h1>
           <p className="text-blue-100 text-sm mt-1 max-w-md">
             Analyze & categorize Gmail emails using AI
           </p>
 
-          {/* CONTROLS ROW */}
-          <div className="mt-4 flex items-center gap-8">
+          {/* CONTROLS */}
+          <div className="mt-4 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
 
             {/* LEFT CONTROLS */}
-            <div className="flex gap-3 items-center">
+            <div className="flex flex-wrap gap-3 items-center">
               <select
                 value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
@@ -124,9 +126,9 @@ export default function Dashboard({ user }) {
               )}
             </div>
 
-            {/* ADD KEYWORD (MID → RIGHT) */}
-            <div className="flex-1 flex justify-start pl-12 overflow-x-auto">
-              <div className="whitespace-nowrap">
+            {/* ADD KEYWORD */}
+            <div className="md:flex-1 md:pl-12 overflow-x-auto">
+              <div className="whitespace-nowrap max-w-full">
                 <AddKeyword user={user} />
               </div>
             </div>
@@ -142,7 +144,7 @@ export default function Dashboard({ user }) {
       )}
 
       {/* CHARTS */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <CategoryPieChart stats={stats} />
         <CategoryBarChart stats={stats} />
       </div>
@@ -166,7 +168,7 @@ export default function Dashboard({ user }) {
       </div>
 
       {/* EMAIL LIST */}
-      <div className="space-y-5 max-h-[520px] overflow-y-auto pr-2">
+      <div className="space-y-4 md:space-y-5 max-h-[520px] overflow-y-auto pr-1 md:pr-2">
         {(activeCategory === "All"
           ? emails
           : grouped[activeCategory] || []
@@ -176,10 +178,10 @@ export default function Dashboard({ user }) {
             href={mail.gmailLink}
             target="_blank"
             rel="noreferrer"
-            className="block p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 transition border border-slate-700"
+            className="block p-4 md:p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 transition border border-slate-700"
           >
             <div className="flex justify-between items-start mb-2 gap-3">
-              <h4 className="text-lg font-semibold text-white leading-snug">
+              <h4 className="text-base md:text-lg font-semibold text-white leading-snug">
                 {mail.subject}
               </h4>
               <span
