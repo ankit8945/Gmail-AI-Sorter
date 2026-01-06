@@ -95,40 +95,45 @@ if (!user?.authenticated) {
       {loading && <LoadingOverlay />}
 
       {/* HEADER */}
-      <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl">
-        <h1 className="text-3xl font-bold text-white">
-          Inbox Dashboard
-        </h1>
-        <p className="text-blue-100 text-sm mt-1">
-          Analyze & categorize Gmail emails using AI
-        </p>
+     <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl">
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
 
-        {/* CONTROLS */}
-        <div className="mt-5 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-3 items-center">
-            <select
-              value={count}
-              onChange={(e) => setCount(Number(e.target.value))}
-              className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
-            >
-              {EMAIL_COUNTS.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+    {/* LEFT: TITLE */}
+    <div>
+      <h1 className="text-3xl font-bold text-white">
+        Inbox Dashboard
+      </h1>
+      <p className="text-blue-100 text-sm mt-1 max-w-md">
+        Analyze & categorize Gmail emails using AI
+      </p>
+    </div>
 
-            <button
-              onClick={handleAnalyze}
-              className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
-            >
-              Analyze
-            </button>
-          </div>
+    {/* RIGHT: CONTROLS */}
+    <div className="flex flex-wrap lg:justify-end gap-3 items-center">
+      <select
+        value={count}
+        onChange={(e) => setCount(Number(e.target.value))}
+        className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
+      >
+        {EMAIL_COUNTS.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </select>
 
-          <AddKeyword />
-        </div>
-      </div>
+      <button
+        onClick={handleAnalyze}
+        className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
+      >
+        Analyze
+      </button>
+
+      <AddKeyword />
+    </div>
+  </div>
+</div>
+
 
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-red-500/20 text-red-400">
@@ -196,4 +201,5 @@ if (!user?.authenticated) {
     </div>
   );
 }
+
 
