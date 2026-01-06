@@ -1,12 +1,11 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL;
-
+  "https://gmail-ai-sorter-backend.onrender.com";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true
+  withCredentials: true,
 });
 
 export async function getMe() {
@@ -18,4 +17,3 @@ export async function analyzeEmails(count) {
   const res = await api.post("/api/analyze", { count });
   return res.data;
 }
-
