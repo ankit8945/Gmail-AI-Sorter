@@ -11,6 +11,11 @@ import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Feedback from "./pages/Feedback.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+
+
+
 
 import { getMe } from "./api.js";
 
@@ -72,6 +77,8 @@ const handleLogout = async () => {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
       </main>
 
@@ -79,6 +86,7 @@ const handleLogout = async () => {
     </div>
   );
 }
+
 
 
 
