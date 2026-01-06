@@ -14,8 +14,7 @@ function CircularLogo({ src = "/fevicon.jpeg", size = 36 }) {
   );
 }
 
-export default function Navbar({ user, onLogout }) 
- {
+export default function Navbar({ user, onLogout }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const base =
@@ -28,13 +27,6 @@ export default function Navbar({ user, onLogout })
     ["/about-us", "About Us"],
     ["/contact", "Contact"]
   ];
-
-  const handleLogout = async () => {
-    <button onClick={onLogout}>
-  Logout
-</button>
-
-  };
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800">
@@ -70,7 +62,7 @@ export default function Navbar({ user, onLogout })
 
           {user?.authenticated ? (
             <button
-              onClick={handleLogout}
+              onClick={onLogout}
               className="ml-2 px-4 py-2 rounded-full
                          bg-red-500/10 text-red-400 hover:bg-red-500/20"
             >
@@ -90,7 +82,7 @@ export default function Navbar({ user, onLogout })
         {/* MOBILE HAMBURGER */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-slate-200"
+          className="md:hidden text-slate-200 text-xl"
         >
           ☰
         </button>
@@ -119,7 +111,10 @@ export default function Navbar({ user, onLogout })
 
             {user?.authenticated ? (
               <button
-                onClick={handleLogout}
+                onClick={() => {
+                  setMobileOpen(false);
+                  onLogout();
+                }}
                 className={`${base} text-red-400 hover:bg-slate-800 w-full text-left`}
               >
                 Logout
@@ -138,5 +133,3 @@ export default function Navbar({ user, onLogout })
     </nav>
   );
 }
-
-
