@@ -129,7 +129,7 @@ if (!user?.authenticated) {
         Analyze
       </button>
 
-      <AddKeyword />
+      <AddKeyword user={user} />
     </div>
   </div>
 </div>
@@ -201,5 +201,6 @@ if (!user?.authenticated) {
     </div>
   );
 }
+
 
 
