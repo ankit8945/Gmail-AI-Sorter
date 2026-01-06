@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-const API = import.meta.env.VITE_API_URL;
+import { api } from "../api";
 
 export default function AddKeyword() {
   const [keyword, setKeyword] = useState("");
@@ -16,19 +15,14 @@ export default function AddKeyword() {
     try {
       setLoading(true);
 
-      const res = await fetch(`${API}/api/add-keyword`, {
-        method: "POST",
-        credentials: "include", // 🔥 REQUIRED
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          keyword: keyword.trim()
-        })
+      const res = await api.post("/api/add-keyword", {
+        keyword: keyword.trim()
       });
 
-      const data = await res.json();
-
-      if (data.success) {
-        setCategories(Object.values(data.userCategories || {}));
+      if (res.data?.success) {
+        setCategories(
+          Object.values(res.data.userCategories || {})
+        );
         setKeyword("");
       }
     } catch (err) {
@@ -43,12 +37,7 @@ export default function AddKeyword() {
   ====================== */
   const deleteCategory = async (category) => {
     try {
-      await fetch(`${API}/api/delete-category`, {
-        method: "POST",
-        credentials: "include", // 🔥 REQUIRED
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category })
-      });
+      await api.post("/api/delete-category", { category });
 
       setCategories((prev) =>
         prev.filter((c) => c !== category)
@@ -79,7 +68,7 @@ export default function AddKeyword() {
 
       {/* ADDED CATEGORIES */}
       {categories.length > 0 && (
-        <div className="flex gap-2 ml-2">
+        <div className="flex gap-2 ml-2 flex-wrap">
           {categories.map((cat) => (
             <span
               key={cat}
