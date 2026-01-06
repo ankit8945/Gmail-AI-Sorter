@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+const API = import.meta.env.VITE_API_URL;
 
 export default function AddKeyword() {
   const [keyword, setKeyword] = useState("");
@@ -14,8 +16,9 @@ export default function AddKeyword() {
     try {
       setLoading(true);
 
-      const res = await fetch("https://gmail-ai-sorter-backend.onrender.com/api/add-keyword", {
+      const res = await fetch(`${API}/api/add-keyword`, {
         method: "POST",
+        credentials: "include", // 🔥 REQUIRED
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           keyword: keyword.trim()
@@ -23,6 +26,7 @@ export default function AddKeyword() {
       });
 
       const data = await res.json();
+
       if (data.success) {
         setCategories(Object.values(data.userCategories || {}));
         setKeyword("");
@@ -39,8 +43,9 @@ export default function AddKeyword() {
   ====================== */
   const deleteCategory = async (category) => {
     try {
-      await fetch("https://gmail-ai-sorter-backend.onrender.com/api/delete-category", {
+      await fetch(`${API}/api/delete-category`, {
         method: "POST",
+        credentials: "include", // 🔥 REQUIRED
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category })
       });
@@ -72,7 +77,7 @@ export default function AddKeyword() {
         {loading ? "Adding..." : "Add"}
       </button>
 
-      {/* ADDED CATEGORIES (INLINE CHIPS) */}
+      {/* ADDED CATEGORIES */}
       {categories.length > 0 && (
         <div className="flex gap-2 ml-2">
           {categories.map((cat) => (
@@ -94,4 +99,3 @@ export default function AddKeyword() {
     </div>
   );
 }
-
