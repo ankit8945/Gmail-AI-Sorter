@@ -29,11 +29,10 @@ export default function Navbar({ user }) {
   ];
 
   const handleLogout = async () => {
-    await fetch(
-      "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
-      { credentials: "include" }
-    );
-    window.location.href = "/";
+    <button onClick={onLogout}>
+  Logout
+</button>
+
   };
 
   return (
@@ -138,3 +137,4 @@ export default function Navbar({ user }) {
     </nav>
   );
 }
+
