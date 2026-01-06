@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 /* 🔥 Logo */
 function CircularLogo({ src = "/fevicon.jpeg", size = 36 }) {
@@ -16,6 +16,8 @@ function CircularLogo({ src = "/fevicon.jpeg", size = 36 }) {
 
 export default function Navbar({ user, onLogout }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   const base =
     "block px-4 py-3 rounded-lg text-sm font-medium transition";
@@ -27,6 +29,17 @@ export default function Navbar({ user, onLogout }) {
     ["/about-us", "About Us"],
     ["/contact", "Contact"]
   ];
+
+  /* close profile dropdown on outside click */
+  useEffect(() => {
+    const handler = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-slate-800">
@@ -60,14 +73,52 @@ export default function Navbar({ user, onLogout }) {
             </NavLink>
           ))}
 
+          {/* 🔽 PROFILE DROPDOWN */}
           {user?.authenticated ? (
-            <button
-              onClick={onLogout}
-              className="ml-2 px-4 py-2 rounded-full
-                         bg-red-500/10 text-red-400 hover:bg-red-500/20"
-            >
-              Logout
-            </button>
+            <div className="relative ml-2" ref={profileRef}>
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 px-2 py-1 rounded-full
+                           hover:bg-slate-800 transition"
+              >
+                <img
+                  src={
+                    user.user?.photo ||
+                    "https://ui-avatars.com/api/?name=User"
+                  }
+                  alt="profile"
+                  className="h-8 w-8 rounded-full border border-slate-600"
+                />
+                <span className="text-xs text-slate-200 max-w-[120px] truncate">
+                  {user.user?.name}
+                </span>
+              </button>
+
+              {profileOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-56
+                             bg-slate-900 border border-slate-700
+                             rounded-xl shadow-xl overflow-hidden"
+                >
+                  <div className="px-4 py-3 border-b border-slate-700">
+                    <p className="text-sm text-slate-100 font-medium truncate">
+                      {user.user?.name}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate">
+                      {user.user?.email}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={onLogout}
+                    className="w-full text-left px-4 py-3 text-sm
+                               text-red-400 hover:bg-slate-800"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <a
               href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
@@ -110,15 +161,20 @@ export default function Navbar({ user, onLogout }) {
             ))}
 
             {user?.authenticated ? (
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  onLogout();
-                }}
-                className={`${base} text-red-400 hover:bg-slate-800 w-full text-left`}
-              >
-                Logout
-              </button>
+              <>
+                <div className="px-4 py-2 text-xs text-slate-400">
+                  {user.user?.email}
+                </div>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    onLogout();
+                  }}
+                  className={`${base} text-red-400 hover:bg-slate-800 w-full text-left`}
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <a
                 href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
