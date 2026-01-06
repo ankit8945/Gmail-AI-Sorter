@@ -17,6 +17,8 @@ const CATEGORY_COLORS = {
 };
 
 export default function Dashboard({ user }) {
+  console.log("DASHBOARD PAGE LOADED", user);
+ {
   const [count, setCount] = useState(20);
   const [emails, setEmails] = useState([]);
   const [stats, setStats] = useState({ total: 0, categories: {} });
@@ -184,3 +186,4 @@ export default function Dashboard({ user }) {
     </div>
   );
 }
+
