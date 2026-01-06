@@ -68,12 +68,15 @@ export default function AddKeyword() {
       </button>
 
       {/* ADDED CATEGORIES */}
-      {categories.length > 0 && (
-        <div className="flex gap-2 ml-2 flex-wrap">
+     {categories.length > 0 && (
+  <div className="flex gap-2 mt-2 sm:mt-0 sm:ml-2 flex-wrap max-w-full">
+
           {categories.map((cat) => (
             <span
               key={cat}
-              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-xs"
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-xs whitespace-nowrap max-w-full"
+
+
             >
               {cat}
               <button
@@ -89,4 +92,5 @@ export default function AddKeyword() {
     </div>
   );
 }
+
 
