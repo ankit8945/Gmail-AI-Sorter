@@ -25,28 +25,7 @@ export default function Dashboard({ user }) {
   const [error, setError] = useState("");
 
   /* =====================
-     AUTH GUARD
-  ===================== */
-  if (!user?.authenticated) {
-    return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
-        <div className="card p-6 text-center max-w-sm">
-          <p className="text-slate-200 mb-4 text-sm">
-            Please login with Google to access your dashboard.
-          </p>
-          <a
-            href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
-            className="px-5 py-2 rounded-full bg-blue-500 text-white text-sm"
-          >
-            Login with Google
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  /* =====================
-     ANALYZE
+     ANALYZE EMAILS
   ===================== */
   const handleAnalyze = async () => {
     setLoading(true);
@@ -57,17 +36,21 @@ export default function Dashboard({ user }) {
       setStats(data.stats || { total: 0, categories: {} });
       setActiveCategory("All");
     } catch {
-      setError("Failed to analyze emails. Try re-login.");
+      setError("Failed to analyze emails. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  /* =====================
+     AUTO ANALYZE ON LOAD
+  ===================== */
   useEffect(() => {
-    if (user?.authenticated && emails.length === 0) {
+    if (emails.length === 0) {
       handleAnalyze();
     }
-  }, [user?.authenticated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* =====================
      GROUP EMAILS
@@ -88,7 +71,7 @@ export default function Dashboard({ user }) {
     <div className="min-h-screen gradient-bg px-4 py-6">
       {loading && <LoadingOverlay />}
 
-      {/* HERO */}
+      {/* HEADER */}
       <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl">
         <h1 className="text-3xl font-bold text-white">
           Inbox Dashboard
@@ -97,10 +80,9 @@ export default function Dashboard({ user }) {
           Analyze & categorize Gmail emails using AI
         </p>
 
-        {/* 🔥 CONTROLS ROW */}
-        <div className="mt-5 flex items-center justify-between gap-4">
-          
-          {/* LEFT: ANALYZE + EXPORT */}
+        {/* CONTROLS */}
+        <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* LEFT */}
           <div className="flex flex-wrap gap-3 items-center">
             <select
               value={count}
@@ -108,7 +90,9 @@ export default function Dashboard({ user }) {
               className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
             >
               {EMAIL_COUNTS.map((c) => (
-                <option key={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
 
@@ -129,10 +113,8 @@ export default function Dashboard({ user }) {
             )}
           </div>
 
-          {/* RIGHT: ADD CATEGORY */}
-          <div className="flex items-center gap-2">
-            <AddKeyword />
-          </div>
+          {/* RIGHT */}
+          <AddKeyword />
         </div>
       </div>
 
@@ -148,18 +130,17 @@ export default function Dashboard({ user }) {
         <CategoryBarChart stats={stats} />
       </div>
 
-      {/* CATEGORY TABS */}
+      {/* CATEGORY FILTER */}
       <div className="flex gap-2 overflow-x-auto pb-3 mb-6">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition
-              ${
-                activeCategory === cat
-                  ? "bg-blue-500 text-white"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition ${
+              activeCategory === cat
+                ? "bg-blue-500 text-white"
+                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+            }`}
           >
             {cat}
             {cat !== "All" && ` (${grouped[cat]?.length || 0})`}
@@ -203,4 +184,3 @@ export default function Dashboard({ user }) {
     </div>
   );
 }
-
