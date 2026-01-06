@@ -2,12 +2,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const PORT = process.env.PORT || 5000;
-export const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
-export const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret";
+export const CLIENT_URL = https://gmail-ai-sorter-bpd7.vercel.app
+export const SESSION_SECRET = any-random-long-string-123456;
 
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-export const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL;
+export const GOOGLE_CALLBACK_URL = https://gmail-ai-sorter-backend.onrender.com/auth/google/callback;
 
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 export const GEMINI_MODEL_NAME =
@@ -22,3 +22,4 @@ if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_CALLBACK_URL) {
 if (!GEMINI_API_KEY) {
   console.warn("GEMINI_API_KEY is not set. AI classification will fail.");
 }
+
