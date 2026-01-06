@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -17,22 +19,23 @@ export default function App() {
 
 // App.jsx (inside App component)
 
+  const navigate = useNavigate();
+
+
 const handleLogout = async () => {
   try {
     await fetch(
       "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
-      {
-        method: "GET",
-        credentials: "include",
-      }
+      { credentials: "include" }
     );
   } catch (err) {
-    console.error("Logout failed", err);
+    console.error(err);
   } finally {
-    // 🔥 THIS LINE IS CRITICAL
     setMe({ authenticated: false, user: null });
+    navigate("/"); // 🔥 THIS IS THE KEY LINE
   }
 };
+
 
 
 
@@ -76,5 +79,6 @@ const handleLogout = async () => {
     </div>
   );
 }
+
 
 
