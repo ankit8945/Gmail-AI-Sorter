@@ -35,7 +35,7 @@ export default function Dashboard({ user }) {
             Please login with Google to access your dashboard.
           </p>
           <a
-            href="http://localhost:5000/auth/google"
+            href="https://gmail-ai-sorter-backend.onrender.com/auth/google"
             className="px-5 py-2 rounded-full bg-blue-500 text-white text-sm"
           >
             Login with Google
@@ -203,3 +203,4 @@ export default function Dashboard({ user }) {
     </div>
   );
 }
+
