@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api";
 
-export default function AddKeyword() {
+export default function AddKeyword({ user }) {
   const [keyword, setKeyword] = useState("");
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  /* ======================
+     CLEAR CATEGORIES ON LOGOUT
+  ====================== */
+  useEffect(() => {
+    if (!user?.authenticated) {
+      setCategories([]);
+      setKeyword("");
+    }
+  }, [user?.authenticated]);
 
   /* ======================
      ADD CATEGORY
@@ -16,7 +26,7 @@ export default function AddKeyword() {
       setLoading(true);
 
       const res = await api.post("/api/add-keyword", {
-        keyword: keyword.trim()
+        keyword: keyword.trim(),
       });
 
       if (res.data?.success) {
@@ -49,13 +59,12 @@ export default function AddKeyword() {
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full">
-
       {/* INPUT */}
       <input
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         placeholder="Add category (eg. scholarship)"
-        className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
+        className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow w-full sm:w-auto"
       />
 
       {/* ADD BUTTON */}
@@ -67,16 +76,13 @@ export default function AddKeyword() {
         {loading ? "Adding..." : "Add"}
       </button>
 
-      {/* ADDED CATEGORIES */}
-     {categories.length > 0 && (
-  <div className="flex gap-2 mt-2 sm:mt-0 sm:ml-2 flex-wrap max-w-full">
-
+      {/* CATEGORY CHIPS */}
+      {categories.length > 0 && (
+        <div className="flex gap-2 mt-2 sm:mt-0 sm:ml-2 flex-wrap max-w-full">
           {categories.map((cat) => (
             <span
               key={cat}
-              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-xs whitespace-nowrap max-w-full"
-
-
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-200 text-xs whitespace-nowrap"
             >
               {cat}
               <button
@@ -92,5 +98,3 @@ export default function AddKeyword() {
     </div>
   );
 }
-
-
