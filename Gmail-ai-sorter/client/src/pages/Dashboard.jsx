@@ -74,56 +74,64 @@ export default function Dashboard({ user }) {
     acc[cat].push(mail);
     return acc;
   }, {});
-
   const categories = ["All", ...Object.keys(grouped)];
 
   return (
     <div className="min-h-screen gradient-bg px-4 py-6">
       {loading && <LoadingOverlay />}
 
-      {/* HEADER */}
-      <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl">
-        
-        {/* TITLE */}
-        <h1 className="text-3xl font-bold text-white">
-          Inbox Dashboard
-        </h1>
-        <p className="text-blue-100 text-sm mt-1 max-w-md">
-          Analyze & categorize Gmail emails using AI
-        </p>
+      {/* HEADER (HORIZONTAL GROW ENABLED) */}
+      <div className="mb-8 rounded-3xl p-6 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 shadow-xl overflow-x-auto">
+        <div className="min-w-[1100px]">
 
-        {/* ANALYZE CONTROLS — LEFT, TEXT KE NICHE */}
-        <div className="mt-4 flex flex-wrap gap-3 items-center">
-          <select
-            value={count}
-            onChange={(e) => setCount(Number(e.target.value))}
-            className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
-          >
-            {EMAIL_COUNTS.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          {/* TITLE */}
+          <h1 className="text-3xl font-bold text-white">
+            Inbox Dashboard
+          </h1>
+          <p className="text-blue-100 text-sm mt-1 max-w-md">
+            Analyze & categorize Gmail emails using AI
+          </p>
 
-          <button
-            onClick={handleAnalyze}
-            className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
-          >
-            Analyze
-          </button>
+          {/* CONTROLS ROW */}
+          <div className="mt-4 flex items-center gap-8">
 
-          {emails.length > 0 && (
-            <button
-              onClick={() => window.print()}
-              className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
-            >
-              Export PDF
-            </button>
-          )}
-        </div>
+            {/* LEFT CONTROLS */}
+            <div className="flex gap-3 items-center">
+              <select
+                value={count}
+                onChange={(e) => setCount(Number(e.target.value))}
+                className="rounded-full px-4 py-2 bg-white text-slate-800 font-medium shadow"
+              >
+                {EMAIL_COUNTS.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
 
-        {/* ADD KEYWORDS — FULL WRAP */}
-        <div className="mt-4 w-full max-w-4xl">
-          <AddKeyword user={user} />
+              <button
+                onClick={handleAnalyze}
+                className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
+              >
+                Analyze
+              </button>
+
+              {emails.length > 0 && (
+                <button
+                  onClick={() => window.print()}
+                  className="px-5 py-2 rounded-full bg-slate-900 text-white font-semibold shadow hover:bg-black"
+                >
+                  Export PDF
+                </button>
+              )}
+            </div>
+
+            {/* ADD KEYWORD (MID → RIGHT) */}
+            <div className="flex-1 flex justify-start pl-12 overflow-x-auto">
+              <div className="whitespace-nowrap">
+                <AddKeyword user={user} />
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
