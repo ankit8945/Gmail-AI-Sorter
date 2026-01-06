@@ -22,7 +22,8 @@ export default function PrivacyPolicy() {
       </ul>
 
       <h2>Contact</h2>
-      <p>Email: teamhexa.lab@gmail.com</p>
+      <p>Email: hackathon.teamhexa@gmail.com</p>
+      <p>Email: teamhexa03@gmail.com</p>
     </div>
   );
 }
