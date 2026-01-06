@@ -13,8 +13,7 @@ const Footer = () => {
         </span>
         <span>
         <a href="/privacy-policy">Privacy Policy</a>
-           </span>
-         <span>
+           
         <a href="/terms-of-service">Terms of Service</a>
 
         </span>
@@ -24,4 +23,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
 
