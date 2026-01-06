@@ -31,7 +31,7 @@ const App = () => {
   }, []);
 
   /* ======================
-     LOADING SCREEN
+     GLOBAL LOADING SCREEN
   ====================== */
   if (!initialized) {
     return (
@@ -47,23 +47,25 @@ const App = () => {
   }
 
   return (
-    // 🔥 FULL HEIGHT LAYOUT
     <div className="min-h-screen flex flex-col">
-      {/* NAVBAR (already fixed) */}
+      {/* NAVBAR */}
       <Navbar user={me} />
 
       {/* MAIN CONTENT */}
-      {/* pb-14 = footer height space so content never hides */}
       <main className="flex-1 pb-14">
         <Routes>
           {/* HOME */}
           <Route path="/" element={<Home user={me} />} />
 
-          {/* DASHBOARD (AUTH REQUIRED) */}
+          {/* DASHBOARD (AUTH SAFE) */}
           <Route
             path="/dashboard"
             element={
-              me.authenticated ? (
+              !initialized ? (
+                <div className="min-h-screen flex items-center justify-center text-slate-300">
+                  Loading dashboard...
+                </div>
+              ) : me.authenticated ? (
                 <div className="px-4 py-4">
                   <Dashboard user={me} />
                 </div>
@@ -84,7 +86,7 @@ const App = () => {
         </Routes>
       </main>
 
-      {/* FOOTER (ALWAYS VISIBLE) */}
+      {/* FOOTER */}
       <div className="fixed bottom-0 left-0 right-0 z-40">
         <Footer />
       </div>
