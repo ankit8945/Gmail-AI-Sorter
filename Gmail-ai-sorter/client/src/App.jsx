@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -12,86 +12,45 @@ import Feedback from "./pages/Feedback.jsx";
 
 import { getMe } from "./api.js";
 
-const App = () => {
-  const [me, setMe] = useState({ authenticated: false, user: null });
-  const [initialized, setInitialized] = useState(false);
+export default function App() {
+  const [me, setMe] = useState(null);
 
   useEffect(() => {
-    const loadMe = async () => {
-      try {
-        const data = await getMe();
-        setMe(data);
-      } catch {
-        setMe({ authenticated: false, user: null });
-      } finally {
-        setInitialized(true);
-      }
-    };
-    loadMe();
+    getMe()
+      .then(setMe)
+      .catch(() => setMe({ authenticated: false }));
   }, []);
 
-  /* ======================
-     GLOBAL LOADING SCREEN
-  ====================== */
-  if (!initialized) {
+  if (!me) {
     return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
-        <div className="card px-6 py-5 flex flex-col items-center gap-3">
-          <div className="h-10 w-10 rounded-full border-4 border-blue-500/20 border-t-blue-400 animate-spin" />
-          <p className="text-xs text-slate-300">
-            Loading Gmail AI Sorter...
-          </p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center text-slate-300">
+        Loading Gmail AI Sorter...
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* NAVBAR */}
       <Navbar user={me} />
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 pb-14">
+      <main className="flex-1">
         <Routes>
-          {/* HOME */}
           <Route path="/" element={<Home user={me} />} />
 
-          {/* DASHBOARD (AUTH SAFE) */}
+          {/* 🔥 SINGLE SOURCE OF TRUTH */}
           <Route
             path="/dashboard"
-            element={
-              !initialized ? (
-                <div className="min-h-screen flex items-center justify-center text-slate-300">
-                  Loading dashboard...
-                </div>
-              ) : me.authenticated ? (
-                <div className="px-4 py-4">
-                  <Dashboard user={me} />
-                </div>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={<Dashboard user={me} />}
           />
 
-          {/* STATIC PAGES */}
           <Route path="/about" element={<About />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
-
-          {/* FALLBACK */}
-          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
 
-      {/* FOOTER */}
-      <div className="fixed bottom-0 left-0 right-0 z-40">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
-};
-
-export default App;
+}
