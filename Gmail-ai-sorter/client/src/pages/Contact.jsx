@@ -75,6 +75,17 @@ const Contact = () => {
               >
                 linkedin.com/in/avilash-saha
               </a>
+               <div>
+              <p className="font-medium text-slate-100">Instagram</p>
+              <a
+                href="https://www.instagram.com/teamhexa.lab/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-400 hover:underline"
+              >
+                @teamhexa.lab
+              </a>
+              <br />
             </div>
 
             {/* TEAM */}
@@ -90,3 +101,4 @@ const Contact = () => {
 };
 
 export default Contact;
+
