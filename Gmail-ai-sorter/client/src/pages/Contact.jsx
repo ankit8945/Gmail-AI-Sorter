@@ -75,6 +75,7 @@ const Contact = () => {
               >
                 linkedin.com/in/avilash-saha
               </a>
+            </div>
                <div>
               <p className="font-medium text-slate-100">Instagram</p>
               <a
@@ -101,4 +102,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
 
