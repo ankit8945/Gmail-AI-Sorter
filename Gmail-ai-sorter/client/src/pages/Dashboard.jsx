@@ -129,7 +129,11 @@ if (!user?.authenticated) {
         Analyze
       </button>
 
-      <AddKeyword user={user} />
+      <AddKeyword
+  key={user?.authenticated ? "logged-in" : "logged-out"}
+  user={user}
+/>
+
     </div>
   </div>
 </div>
@@ -201,6 +205,7 @@ if (!user?.authenticated) {
     </div>
   );
 }
+
 
 
 
