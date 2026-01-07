@@ -22,9 +22,9 @@ export default function Navbar({ user, onLogout }) {
   const base =
     "block px-4 py-3 rounded-lg text-sm font-medium transition";
 
+  // ❌ Dashboard yaha se hata diya
   const links = [
     ["/", "Home"],
-    ["/dashboard", "Dashboard"],
     ["/about", "About"],
     ["/about-us", "About Us"],
     ["/contact", "Contact"]
@@ -73,7 +73,23 @@ export default function Navbar({ user, onLogout }) {
             </NavLink>
           ))}
 
-          {/* 🔽 PROFILE DROPDOWN */}
+          {/* ✅ Dashboard only when logged in */}
+          {user?.authenticated && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `px-4 py-2 rounded-full text-sm ${
+                  isActive
+                    ? "bg-blue-500 text-white"
+                    : "text-slate-300 hover:bg-slate-800"
+                }`
+              }
+            >
+              Dashboard
+            </NavLink>
+          )}
+
+          {/* PROFILE / LOGIN */}
           {user?.authenticated ? (
             <div className="relative ml-2" ref={profileRef}>
               <button
@@ -159,6 +175,17 @@ export default function Navbar({ user, onLogout }) {
                 {label}
               </NavLink>
             ))}
+
+            {/* ✅ Mobile Dashboard */}
+            {user?.authenticated && (
+              <NavLink
+                to="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className={`${base} text-slate-300 hover:bg-slate-800`}
+              >
+                Dashboard
+              </NavLink>
+            )}
 
             {user?.authenticated ? (
               <>
