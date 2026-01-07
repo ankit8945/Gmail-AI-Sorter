@@ -5,13 +5,11 @@ const Home = ({ user }) => {
   const navigate = useNavigate();
 
   const handleConnect = () => {
-    // 🔥 Always start Google OAuth
     window.location.href =
       "https://gmail-ai-sorter-backend.onrender.com/auth/google";
   };
 
   const handleDashboard = () => {
-    // 🔥 Always go to dashboard
     navigate("/dashboard");
   };
 
@@ -34,6 +32,7 @@ const Home = ({ user }) => {
 
             {/* ACTION BUTTONS */}
             <div className="flex flex-wrap gap-3 items-center">
+              {/* LOGIN BUTTON — always visible */}
               <button
                 onClick={handleConnect}
                 className="px-5 py-3 rounded-full bg-gradient-to-r from-blue-500 to-sky-400 text-white text-sm font-medium shadow-lg shadow-blue-500/40 hover:from-blue-600 hover:to-sky-500 transition"
@@ -41,15 +40,18 @@ const Home = ({ user }) => {
                 Connect Gmail with Google
               </button>
 
-              <button
-                onClick={handleDashboard}
-                className="px-4 py-2 rounded-full border border-slate-600 text-slate-200 text-xs font-medium hover:bg-slate-800 transition"
-              >
-                Go to Dashboard
-              </button>
+              {/* DASHBOARD — ONLY WHEN LOGGED IN */}
+              {user?.authenticated && (
+                <button
+                  onClick={handleDashboard}
+                  className="px-4 py-2 rounded-full border border-slate-600 text-slate-200 text-xs font-medium hover:bg-slate-800 transition"
+                >
+                  Go to Dashboard
+                </button>
+              )}
             </div>
 
-            {/* LOGIN STATUS (OPTIONAL, CLEAN) */}
+            {/* LOGIN STATUS */}
             {user?.authenticated && (
               <p className="mt-4 text-xs text-green-400">
                 ✅ You are already logged in
