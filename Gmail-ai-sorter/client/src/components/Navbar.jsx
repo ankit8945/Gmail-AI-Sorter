@@ -22,14 +22,6 @@ export default function Navbar({ user, onLogout }) {
   const base =
     "block px-4 py-3 rounded-lg text-sm font-medium transition";
 
-  // ❌ Dashboard yaha se hata diya
-  const links = [
-    ["/", "Home"],
-    ["/about", "About"],
-    ["/about-us", "About Us"],
-    ["/contact", "Contact"]
-  ];
-
   /* close profile dropdown on outside click */
   useEffect(() => {
     const handler = (e) => {
@@ -55,25 +47,24 @@ export default function Navbar({ user, onLogout }) {
           </span>
         </div>
 
-        {/* DESKTOP NAV */}
+        {/* ================= DESKTOP NAV ================= */}
         <div className="hidden md:flex items-center gap-2">
-          {links.map(([path, label]) => (
-            <NavLink
-              key={path}
-              to={path}
-              className={({ isActive }) =>
-                `px-4 py-2 rounded-full text-sm ${
-                  isActive
-                    ? "bg-blue-500 text-white"
-                    : "text-slate-300 hover:bg-slate-800"
-                }`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
 
-          {/* ✅ Dashboard only when logged in */}
+          {/* Home */}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-full text-sm ${
+                isActive
+                  ? "bg-blue-500 text-white"
+                  : "text-slate-300 hover:bg-slate-800"
+              }`
+            }
+          >
+            Home
+          </NavLink>
+
+          {/* Dashboard — Home ke turant baad, sirf login pe */}
           {user?.authenticated && (
             <NavLink
               to="/dashboard"
@@ -88,6 +79,48 @@ export default function Navbar({ user, onLogout }) {
               Dashboard
             </NavLink>
           )}
+
+          {/* About */}
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-full text-sm ${
+                isActive
+                  ? "bg-blue-500 text-white"
+                  : "text-slate-300 hover:bg-slate-800"
+              }`
+            }
+          >
+            About
+          </NavLink>
+
+          {/* About Us */}
+          <NavLink
+            to="/about-us"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-full text-sm ${
+                isActive
+                  ? "bg-blue-500 text-white"
+                  : "text-slate-300 hover:bg-slate-800"
+              }`
+            }
+          >
+            About Us
+          </NavLink>
+
+          {/* Contact */}
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-full text-sm ${
+                isActive
+                  ? "bg-blue-500 text-white"
+                  : "text-slate-300 hover:bg-slate-800"
+              }`
+            }
+          >
+            Contact
+          </NavLink>
 
           {/* PROFILE / LOGIN */}
           {user?.authenticated ? (
@@ -155,37 +188,36 @@ export default function Navbar({ user, onLogout }) {
         </button>
       </div>
 
-      {/* MOBILE MENU */}
+      {/* ================= MOBILE MENU ================= */}
       {mobileOpen && (
         <div className="md:hidden border-t border-slate-800 bg-slate-900">
           <div className="px-4 py-3 space-y-1">
-            {links.map(([path, label]) => (
-              <NavLink
-                key={path}
-                to={path}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `${base} ${
-                    isActive
-                      ? "bg-blue-500 text-white"
-                      : "text-slate-300 hover:bg-slate-800"
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
 
-            {/* ✅ Mobile Dashboard */}
+            <NavLink to="/" onClick={() => setMobileOpen(false)} className={base}>
+              Home
+            </NavLink>
+
             {user?.authenticated && (
               <NavLink
                 to="/dashboard"
                 onClick={() => setMobileOpen(false)}
-                className={`${base} text-slate-300 hover:bg-slate-800`}
+                className={base}
               >
                 Dashboard
               </NavLink>
             )}
+
+            <NavLink to="/about" onClick={() => setMobileOpen(false)} className={base}>
+              About
+            </NavLink>
+
+            <NavLink to="/about-us" onClick={() => setMobileOpen(false)} className={base}>
+              About Us
+            </NavLink>
+
+            <NavLink to="/contact" onClick={() => setMobileOpen(false)} className={base}>
+              Contact
+            </NavLink>
 
             {user?.authenticated ? (
               <>
