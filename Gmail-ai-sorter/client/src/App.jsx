@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -14,63 +12,62 @@ import Feedback from "./pages/Feedback.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 
-
-
-
 import { getMe } from "./api.js";
 
 export default function App() {
-  const [me, setMe] = useState(null);
-
-// App.jsx (inside App component)
+  const [me, setMe] = useState({
+    checking: true,
+    authenticated: false,
+    user: null,
+  });
 
   const navigate = useNavigate();
 
-
-const handleLogout = async () => {
-  try {
-    await fetch(
-      "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
-      { credentials: "include" }
-    );
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setMe({ authenticated: false, user: null });
-    navigate("/"); // 🔥 THIS IS THE KEY LINE
-  }
-};
-
-
-
+  const handleLogout = async () => {
+    try {
+      await fetch(
+        "https://gmail-ai-sorter-backend.onrender.com/auth/logout",
+        { credentials: "include" }
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setMe({ checking: false, authenticated: false, user: null });
+      navigate("/");
+    }
+  };
 
   useEffect(() => {
     getMe()
-      .then(setMe)
-      .catch(() => setMe({ authenticated: false }));
+      .then((res) => {
+        setMe({ checking: false, ...res });
+      })
+      .catch(() => {
+        setMe({ checking: false, authenticated: false, user: null });
+      });
   }, []);
-
-  if (!me) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-slate-300">
-        Loading Gmail AI Sorter...
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar user={me} onLogout={handleLogout} />
 
-
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home user={me} />} />
 
-          {/* 🔥 SINGLE SOURCE OF TRUTH */}
           <Route
             path="/dashboard"
-            element={<Dashboard user={me} />}
+            element={
+              me.authenticated ? (
+                <Dashboard user={me} />
+              ) : me.checking ? (
+                <div className="min-h-screen flex items-center justify-center text-slate-300">
+                  Loading Dashboard...
+                </div>
+              ) : (
+                <Home user={me} />
+              )
+            }
           />
 
           <Route path="/about" element={<About />} />
@@ -86,7 +83,3 @@ const handleLogout = async () => {
     </div>
   );
 }
-
-
-
-
