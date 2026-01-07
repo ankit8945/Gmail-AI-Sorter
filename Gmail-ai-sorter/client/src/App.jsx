@@ -55,20 +55,20 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home user={me} />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              me.authenticated ? (
-                <Dashboard user={me} />
-              ) : me.checking ? (
-                <div className="min-h-screen flex items-center justify-center text-slate-300">
-                  Loading Dashboard...
-                </div>
-              ) : (
-                <Home user={me} />
-              )
-            }
-          />
+         <Route
+  path="/dashboard"
+  element={
+    me.checking ? (
+      <div className="min-h-screen flex items-center justify-center text-slate-300">
+        Loading Dashboard...
+      </div>
+    ) : me.authenticated ? (
+      <Dashboard user={me} />
+    ) : (
+      <Navigate to="/" replace />
+    )
+  }
+/>
 
           <Route path="/about" element={<About />} />
           <Route path="/about-us" element={<AboutUs />} />
@@ -83,3 +83,4 @@ export default function App() {
     </div>
   );
 }
+
