@@ -37,7 +37,7 @@ const Home = ({ user }) => {
                 onClick={handleConnect}
                 className="px-5 py-3 rounded-full bg-gradient-to-r from-blue-500 to-sky-400 text-white text-sm font-medium shadow-lg shadow-blue-500/40 hover:from-blue-600 hover:to-sky-500 transition"
               >
-                Connect Gmail with Google
+                Connect Gmail 
               </button>
 
               {/* DASHBOARD — ONLY WHEN LOGGED IN */}
@@ -98,3 +98,4 @@ const Home = ({ user }) => {
 };
 
 export default Home;
+
