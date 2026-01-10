@@ -67,12 +67,3 @@ Gmail AI Sorter securely connects to Gmail and:
 3. Gemini AI categorizes emails
 4. Processed insights are shown on the dashboard
 
----
-
-## 🧪 Local Development (Optional)
-
-### Start Backend
-```bash
-cd server
-npm install
-node src/index.js
